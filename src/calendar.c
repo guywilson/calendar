@@ -17,30 +17,36 @@
 *******************************************************************************/
 int main(int argc, char *argv[])
 {
-	char pszYear[8];
-	char pszMonth[8];
-	int year = 0;
-	int month = 0;
-	int firstDay = MONDAY;
+	char *		pszYear;
+	char *		pszMonth;
+	int 		year;
+	int 		month;
+	int 		firstDay = MONDAY;
 	
 	/*
 	** Fetch parameters...
 	*/
 	if (argc == 3) {
-		strcpy(pszMonth, argv[1]);
-		strcpy(pszYear, argv[2]);
+		pszMonth = strdup(argv[1]);
+		pszYear = strdup(argv[2]);
 	}
 	else {
-		printf("Please enter month (mm): ");
+		pszMonth = (char *)malloc(8);
+		pszYear = (char *)malloc(8);
+
+		printf("Please enter month number (1 - 12): ");
 		fgets(pszMonth, 8, stdin);
 
 		printf("Please enter year (yyyy): ");
 		fgets(pszYear, 8, stdin);
 	}
 	
-	year = atoi(pszYear);
-	month = atoi(pszMonth);
+	month = (int)strtol(pszMonth, NULL, 10);
+	year = (int)strtol(pszYear, NULL, 10);
 	
+	free(pszMonth);
+	free(pszYear);
+
 	/*
 	** Do some validation...
 	*/
