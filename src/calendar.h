@@ -5,13 +5,13 @@
 /*
 ** Days of the week...
 */
-#define MONDAY		 0
-#define TUESDAY		 1
-#define WEDNESDAY	 2
-#define THURSDAY	 3
-#define FRIDAY		 4
-#define SATURDAY 	 5
-#define SUNDAY		 6
+#define SUNDAY		 0
+#define MONDAY		 1
+#define TUESDAY		 2
+#define WEDNESDAY	 3
+#define THURSDAY	 4
+#define FRIDAY		 5
+#define SATURDAY 	 6
 
 /*
 ** Months...
@@ -31,6 +31,7 @@
 
 #define DAYS_PER_YEAR	 365
 
+#define WEEK_START_DAY   SUNDAY
 /*
 ** Reference point is 1st Jan 2008...
 */

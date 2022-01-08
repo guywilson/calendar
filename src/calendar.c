@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	char *		pszMonth;
 	int 		year;
 	int 		month;
-	int 		firstDay = MONDAY;
+	int 		firstDay = SUNDAY;
 	
 	/*
 	** Fetch parameters...
@@ -142,16 +142,33 @@ int calculateFirstDayOfMonth(int month, int year)
 *******************************************************************************/
 void printMonth(int month, int year, int daysInMonth, int firstDay)
 {
-	int dayOfWeekCounter = MONDAY;
-	int dayOfMonthCounter = 1;
-	int i = 0;
+	int			dayOfWeekCounter;
+	int 		dayOfMonthCounter = 1;
+	int 		i;
+	int			dayCount;
+	const char 	days[12] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
 	
 	printf("\n\n\t%s %d\n\n", getMonthName(month), year);
 	
 	/*
 	** First draw the days...
 	*/
-	printf("\t   M   T   W   T   F   S   S\n");
+	printf("\t");
+
+	dayCount = 0;
+	i = WEEK_START_DAY;
+
+	while (dayCount < 7) {
+		printf("   %c", days[i++]);
+
+		if (i == 7) {
+			i = 0;
+		}
+
+		dayCount++;
+	}
+
+	printf("\n");
 	printf("\t----------------------------\n");
 	
 	dayOfWeekCounter = firstDay;
@@ -169,8 +186,8 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 		
 		printf("%d  ", dayOfMonthCounter);
 		
-		if (dayOfWeekCounter++ == SUNDAY) {
-			dayOfWeekCounter = MONDAY;
+		if (dayOfWeekCounter++ == 6) {
+			dayOfWeekCounter = 0;
 			printf("\n\t  ");
 		}
 		
@@ -292,8 +309,8 @@ int addDays(int day, int daysToAdd)
 	for (i = 0;i < daysToAdd;i++) {
 		day++;
 		
-		if (day > SUNDAY) {
-			day = MONDAY;
+		if (day > 6) {
+			day = 0;
 		}
 	}
 	
@@ -316,8 +333,8 @@ int subtractDays(int day, int daysToSubtract)
 	for (i = 0;i < daysToSubtract;i++) {
 		day--;
 		
-		if (day < MONDAY) {
-			day = SUNDAY;
+		if (day < 0) {
+			day = 6;
 		}
 	}
 	
