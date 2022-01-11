@@ -21,7 +21,8 @@ int main(int argc, char *argv[])
 	char *		pszMonth;
 	int 		year;
 	int 		month;
-	int 		firstDay = SUNDAY;
+	int 		firstDay;
+	int			daysPerMonth;
 	
 	/*
 	** Fetch parameters...
@@ -58,11 +59,13 @@ int main(int argc, char *argv[])
 	** Calculate the 1st day of the given month...
 	*/
 	firstDay = calculateFirstDayOfMonth(month, year);
+
+	daysPerMonth = getDaysPerMonth(month, year);
 	
 	/*
 	** Print the calendar...
 	*/
-	printMonth(month, year, getDaysPerMonth(month, year), firstDay);
+	printMonth(month, year, daysPerMonth, firstDay);
 
 	return 0;
 }
@@ -146,7 +149,6 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 	int 		dayOfMonthCounter = 1;
 	int 		i;
 	int			dayCount;
-	const char 	days[12] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
 	
 	printf("\n\n\t%s %d\n\n", getMonthName(month), year);
 	
@@ -159,7 +161,9 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 	i = WEEK_START_DAY;
 
 	while (dayCount < 7) {
-		printf("   %c", days[i++]);
+		printf("   %c", getWeekDayChar(i));
+
+		i++;
 
 		if (i == 7) {
 			i = 0;
@@ -225,6 +229,12 @@ const char * getMonthName(int month)
 	return months[month - 1];
 }
 
+char getWeekDayChar(int weekDay)
+{
+	const char 	days[7] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
+
+	return days[weekDay];
+}
 
 /*******************************************************************************
 *

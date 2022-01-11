@@ -47,6 +47,7 @@
 boolean	        isLeapYear(int year);
 void	        printMonth(int month, int year, int daysInMonth, int firstDay);
 const char	*   getMonthName(int month);
+char            getWeekDayChar(int weekDay);
 int		        getDaysPerMonth(int month, int year);
 boolean         validate(int month, int year);
 int		        calculateFirstDayOfMonth(int month, int year);
