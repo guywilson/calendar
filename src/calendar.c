@@ -8,13 +8,6 @@
 
 #include "calendar.h"
 
-/*******************************************************************************
-*
-* int main(int argc, char *argv[]);
-*
-* Entry point of program, command line arguments passed in through argv array
-*
-*******************************************************************************/
 int main(int argc, char *argv[])
 {
 	char *		pszYear;
@@ -70,16 +63,6 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-
-/*******************************************************************************
-*
-* int calculateFirstDayOfMonth(int month, int year);
-*
-* Calculates which day of the week the 1st of the given month falls on. This
-* is calculated with reference to a known date - 1st January 2008 which was a
-* Tuesday.
-*
-*******************************************************************************/
 int calculateFirstDayOfMonth(int month, int year)
 {
 	int firstDay = REFERENCE_DAY;
@@ -135,14 +118,6 @@ int calculateFirstDayOfMonth(int month, int year)
 	return firstDay;
 }
 
-
-/*******************************************************************************
-*
-* void printMonth(int month, int year, int daysInMonth, int firstDay);
-*
-* Print the calendar for the requested month to the screen.
-*
-*******************************************************************************/
 void printMonth(int month, int year, int daysInMonth, int firstDay)
 {
 	int			dayOfWeekCounter;
@@ -201,14 +176,6 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 	printf("\n\n");
 }
 
-
-/*******************************************************************************
-*
-* char * getMonthName(int month);
-*
-* Return the month name for the given integer month constant.
-*
-*******************************************************************************/
 const char * getMonthName(int month)
 {
 	static const char * months[] = {
@@ -236,28 +203,11 @@ char getWeekDayChar(int weekDay)
 	return days[weekDay];
 }
 
-/*******************************************************************************
-*
-* boolean isLeapYear(int year);
-*
-* Returns true if the given year is a leap year, the basis of the
-* Gregorian calendar system.
-*
-*******************************************************************************/
 boolean isLeapYear(int year)
 {
 	return (((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0) ? true : false;
 }
 
-
-/*******************************************************************************
-*
-* int getDaysPerMonth(int month, int year);
-*
-* Returns the number of days in the given month, the only variation being for
-* February depending on whether the given year is a leap year.
-*
-*******************************************************************************/
 int getDaysPerMonth(int month, int year)
 {
 	static const int days_per_month[] = {
@@ -277,15 +227,6 @@ int getDaysPerMonth(int month, int year)
 	return days;
 }
 
-
-/*******************************************************************************
-*
-* boolean validateGregorian(int month, int year);
-*
-* Validate that the given month and year are valid and are after the Gregorian
-* calendar system was adopted.
-*
-*******************************************************************************/
 boolean validate(int month, int year)
 {
 	boolean isValid = true;
@@ -303,15 +244,6 @@ boolean validate(int month, int year)
 	return isValid;
 }
 
-
-/*******************************************************************************
-*
-* int addDays(int day, int daysToAdd);
-*
-* Adds the specified number of days to the given day to return the day of the
-* week.
-*
-*******************************************************************************/
 int addDays(int day, int daysToAdd)
 {
 	int i;
@@ -327,15 +259,6 @@ int addDays(int day, int daysToAdd)
 	return day;
 }
 
-
-/*******************************************************************************
-*
-* int subtractDays(int day, int daysToSubtract);
-*
-* Subtracts the specified number of days from the given day to return the day 
-* of the week.
-*
-*******************************************************************************/
 int subtractDays(int day, int daysToSubtract)
 {
 	int i;
