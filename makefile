@@ -12,11 +12,11 @@ BUILD = build
 DEP = dep
 
 # What is our target
-TARGET = calendar
+TARGET = gcal
 
 # Tools
-CPP = gcc-11
-LINKER = gcc-11
+CPP = gcc
+LINKER = gcc
 
 # postcompile step
 PRECOMPILE = @ mkdir -p $(BUILD) $(DEP)

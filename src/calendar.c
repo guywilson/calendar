@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <sys/time.h>
 
 #ifdef C64
 #include "c64.h"
@@ -8,63 +10,63 @@
 
 #include "calendar.h"
 
-int main(int argc, char *argv[])
-{
-	char *		pszYear;
-	char *		pszMonth;
-	int 		year;
-	int 		month;
-	int 		firstDay;
-	int			daysPerMonth;
-	
-	/*
-	** Fetch parameters...
-	*/
-	if (argc == 3) {
-		pszMonth = strdup(argv[1]);
-		pszYear = strdup(argv[2]);
-	}
-	else {
-		pszMonth = (char *)malloc(8);
-		pszYear = (char *)malloc(8);
+static const char * getWeekDayString(int weekDay) {
+	const char *    days[7] = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
 
-		printf("Please enter month number (1 - 12): ");
-		fgets(pszMonth, 8, stdin);
-
-		printf("Please enter year (yyyy): ");
-		fgets(pszYear, 8, stdin);
-	}
-	
-	month = (int)strtol(pszMonth, NULL, 10);
-	year = (int)strtol(pszYear, NULL, 10);
-	
-	free(pszMonth);
-	free(pszYear);
-
-	/*
-	** Do some validation...
-	*/
-	if (!validate(month, year)) {
-		return -1;
-	}
-	
-	/*
-	** Calculate the 1st day of the given month...
-	*/
-	firstDay = calculateFirstDayOfMonth(month, year);
-
-	daysPerMonth = getDaysPerMonth(month, year);
-	
-	/*
-	** Print the calendar...
-	*/
-	printMonth(month, year, daysPerMonth, firstDay);
-
-	return 0;
+	return days[weekDay];
 }
 
-int calculateFirstDayOfMonth(int month, int year)
-{
+static boolean isLeapYear(int year) {
+	return (((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0) ? true : false;
+}
+
+static int getDaysPerMonth(int month, int year) {
+	static const int days_per_month[] = {
+		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+	};
+	
+	int days = 0;
+
+	days = days_per_month[month - 1];
+	
+	if (month == FEBRUARY) {
+		if (isLeapYear(year)) {
+			days += 1;
+		}
+	}
+	
+	return days;
+}
+
+static int addDays(int day, int daysToAdd) {
+	int i;
+	
+	for (i = 0;i < daysToAdd;i++) {
+		day++;
+		
+		if (day > 6) {
+			day = 0;
+		}
+	}
+	
+	return day;
+}
+
+static int subtractDays(int day, int daysToSubtract) {
+	int i;
+	
+	for (i = 0;i < daysToSubtract;i++) {
+		day--;
+		
+		if (day < 0) {
+			day = 6;
+		}
+	}
+	
+	return day;
+}
+
+static int calculateFirstDayOfMonth(int month, int year) {
 	int firstDay = REFERENCE_DAY;
 	int yearCounter = 0;
 	int monthCounter = JANUARY;
@@ -118,8 +120,26 @@ int calculateFirstDayOfMonth(int month, int year)
 	return firstDay;
 }
 
-void printMonth(int month, int year, int daysInMonth, int firstDay)
-{
+static const char * getMonthName(int month) {
+	static const char * months[] = {
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December"
+	};
+
+	return months[month - 1];
+}
+
+static void printMonth(int month, int year, int daysInMonth, int firstDay) {
 	int			dayOfWeekCounter;
 	int 		dayOfMonthCounter = 1;
 	int 		i;
@@ -136,7 +156,7 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 	i = WEEK_START_DAY;
 
 	while (dayCount < 7) {
-		printf("   %c", getWeekDayChar(i));
+		printf("  %s", getWeekDayString(i));
 
 		i++;
 
@@ -176,59 +196,7 @@ void printMonth(int month, int year, int daysInMonth, int firstDay)
 	printf("\n\n");
 }
 
-const char * getMonthName(int month)
-{
-	static const char * months[] = {
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December"
-	};
-
-	return months[month - 1];
-}
-
-char getWeekDayChar(int weekDay)
-{
-	const char 	days[7] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
-
-	return days[weekDay];
-}
-
-boolean isLeapYear(int year)
-{
-	return (((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0) ? true : false;
-}
-
-int getDaysPerMonth(int month, int year)
-{
-	static const int days_per_month[] = {
-		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-	};
-	
-	int days = 0;
-
-	days = days_per_month[month - 1];
-	
-	if (month == FEBRUARY) {
-		if (isLeapYear(year)) {
-			days += 1;
-		}
-	}
-	
-	return days;
-}
-
-boolean validate(int month, int year)
-{
+static boolean validate(int month, int year) {
 	boolean isValid = true;
 	
 	if (month > 12 || month < 1) {
@@ -244,32 +212,57 @@ boolean validate(int month, int year)
 	return isValid;
 }
 
-int addDays(int day, int daysToAdd)
-{
-	int i;
+int main(int argc, char *argv[]) {
+	char *		        pszYear;
+	char *		        pszMonth;
+	int 		        year;
+	int 		        month;
+	int 		        firstDay;
+	int			        daysPerMonth;
+	struct timeval		tv;
+    struct tm *		    tm_data;
 	
-	for (i = 0;i < daysToAdd;i++) {
-		day++;
-		
-		if (day > 6) {
-			day = 0;
-		}
-	}
-	
-	return day;
-}
+	/*
+	** Fetch parameters...
+	*/
+	if (argc == 3) {
+		pszMonth = strdup(argv[1]);
+		pszYear = strdup(argv[2]);
 
-int subtractDays(int day, int daysToSubtract)
-{
-	int i;
-	
-	for (i = 0;i < daysToSubtract;i++) {
-		day--;
-		
-		if (day < 0) {
-			day = 6;
-		}
+        month = atoi(pszMonth);
+        year = atoi(pszYear);
+        
+        free(pszMonth);
+        free(pszYear);
+	}
+	else {
+        gettimeofday(&tv, NULL);
+
+        tm_data = localtime(&tv.tv_sec);
+        
+        month = tm_data->tm_mon + 1;
+        year = tm_data->tm_year + 1900;
 	}
 	
-	return day;
+
+	/*
+	** Do some validation...
+	*/
+	if (!validate(month, year)) {
+		return -1;
+	}
+	
+	/*
+	** Calculate the 1st day of the given month...
+	*/
+	firstDay = calculateFirstDayOfMonth(month, year);
+
+	daysPerMonth = getDaysPerMonth(month, year);
+	
+	/*
+	** Print the calendar...
+	*/
+	printMonth(month, year, daysPerMonth, firstDay);
+
+	return 0;
 }

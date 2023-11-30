@@ -40,16 +40,3 @@
 #define REFERENCE_DAY	 TUESDAY
 
 #define BASE_YEAR		 1582
-
-/*
-** Function declarations...
-*/
-boolean	        isLeapYear(int year);
-void	        printMonth(int month, int year, int daysInMonth, int firstDay);
-const char	*   getMonthName(int month);
-char            getWeekDayChar(int weekDay);
-int		        getDaysPerMonth(int month, int year);
-boolean         validate(int month, int year);
-int		        calculateFirstDayOfMonth(int month, int year);
-int		        addDays(int day, int daysToAdd);
-int		        subtractDays(int day, int daysToSubtract);
