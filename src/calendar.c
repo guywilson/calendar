@@ -213,8 +213,8 @@ static boolean validate(int month, int year) {
 }
 
 int main(int argc, char *argv[]) {
-	char *		        pszYear;
-	char *		        pszMonth;
+	char 		        szYear[8];
+	char 		        szMonth[8];
 	int 		        year;
 	int 		        month;
 	int 		        firstDay;
@@ -226,14 +226,11 @@ int main(int argc, char *argv[]) {
 	** Fetch parameters...
 	*/
 	if (argc == 3) {
-		pszMonth = strdup(argv[1]);
-		pszYear = strdup(argv[2]);
+        strncpy(szMonth, argv[1], 8);
+        strncpy(szYear, argv[2], 8);
 
-        month = atoi(pszMonth);
-        year = atoi(pszYear);
-        
-        free(pszMonth);
-        free(pszYear);
+        month = atoi(szMonth);
+        year = atoi(szYear);
 	}
 	else {
         gettimeofday(&tv, NULL);
@@ -242,8 +239,7 @@ int main(int argc, char *argv[]) {
         
         month = tm_data->tm_mon + 1;
         year = tm_data->tm_year + 1900;
-	}
-	
+	}	
 
 	/*
 	** Do some validation...
