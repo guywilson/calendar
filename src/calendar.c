@@ -256,7 +256,6 @@ int main(int argc, char *argv[]) {
 	** Calculate the 1st day of the given month...
 	*/
 	firstDay = calculateFirstDayOfMonth(month, year);
-
 	daysPerMonth = getDaysPerMonth(month, year);
 	
 	/*
